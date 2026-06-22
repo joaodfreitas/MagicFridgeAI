@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receita IA — MagicFridgeAI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <span style="font-size:1.4rem">🧊</span>
+    <h1>Magic<span class="accent">Fridge</span>AI</h1>
+</header>
+
+<div class="container">
+    <div class="card">
+
+        <p class="card-title">🤖 Receita com IA</p>
+        <p class="card-subtitle">Gera uma sugestão de receita com os alimentos da sua geladeira.</p>
+
+        <hr class="divider">
+
+        <div class="btn-group" style="margin-bottom: 24px;">
+            <button class="btn" id="btnGerar" onclick="gerarReceita()">
+                ✨ Gerar Receita
+            </button>
+            <a href="/" class="btn btn-ghost">← Voltar</a>
+        </div>
+
+        <div id="resultado" class="recipe-box"></div>
+
+    </div>
+</div>
+
+<script>
+    async function gerarReceita() {
+        const btn = document.getElementById("btnGerar");
+        const box = document.getElementById("resultado");
+
+        btn.innerHTML = '<span class="loading"></span> Gerando...';
+        btn.disabled = true;
+        box.textContent = "";
+
+        try {
+            const res = await fetch("/receita/gerar");
+            const texto = await res.text();
+            box.textContent = texto;
+        } catch (err) {
+            box.textContent = "Erro ao gerar receita. Tente novamente.";
+        } finally {
+            btn.innerHTML = '✨ Gerar Receita';
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
